@@ -1,15 +1,20 @@
-const express = require('express');
-const cors = require('cors');
 require('dotenv').config();
+const config = require("./config/main");
+const express = require('express');
+const db = require("./config/mongoose");
+const cors = require('cors');
+const cookieParser = require("cookie-parser");
+const router = require('./routes');
 
 const app = express();
 
-//Cross-Origin-Resource-Sharing
-app.use(cors());
-//Body Parser Middleware
+app.use(cors({credentials: true}));
+app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(router);
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => console.log(`Server is runing on ${PORT}`))
+db().then(() => {
+    console.log('Connected to DB');
+    app.listen(config.PORT, () => console.log(`Server is running on port ${config.PORT}`));
+});
