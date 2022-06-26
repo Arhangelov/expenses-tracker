@@ -18,24 +18,14 @@ const userSchema = new mongoose.Schema({
         minlength: 9,
     },
      income: {
-        type: Object,
-        name: { type: String, default: '' },
-        amount: { type: Number, default: 0 },
-        date: { type: Date, default: Date.now }
+        type: Array,
      },
      expense: {
-        type: Object,
-        name: { type: String, default: '' },
-        amount: { type: Number, default: 0 },
-        date: { type: Date, default: Date.now }
+        type: Array,
      },
      transactions: {
         type: Array,
-        type: { type: String, default: '' },
-        name: { type: String, default: '' },
-        amount: { type: Number, default: 0 },
-        date: { type: Date, default: Date.now },
-     }
+    }
 
 });
 
