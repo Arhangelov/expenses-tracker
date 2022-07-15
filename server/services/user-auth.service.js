@@ -20,16 +20,21 @@ const register = async ({email, username, password}) => {
   
 };
 
-const login = async ( usernameOrEmail ) => {
+const login = async ( email ) => {
   const secret = process.env.SECRET; // Hash secret phrase taken from .env outside the repository.
 
-  let user = await User.findOne({ usernameOrEmail });
+  let user = await User.findOne({ email });
 
-  const token = jwt.sign({ username: user.usernameOrEmail }, secret, {
+  const userDTO = {
+    email: user.email,
+    username: user.username
+  }
+
+  const token = jwt.sign({ email: user.email, username: user.username }, secret, {
     expiresIn: "2h",
   });
 
-  return { token };
+  return { userDTO, token };
 };
 
 module.exports = { register, login };

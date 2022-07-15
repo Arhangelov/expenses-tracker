@@ -7,7 +7,7 @@ const { validationResult } = require("express-validator");
 router.post('/register',
     registerUserReqValidation,
     (req, res) => {
-        const errors = validationResult(req); // Saving any occurred errors.
+        const errors = validationResult(req) // Saving any occurred errors.
         // If there're errors mark as Bad Request 400 and return error list.
          if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() }); 
         else validationResult(req).throw(); // Else clear validation results and continue with the response.
@@ -16,7 +16,7 @@ router.post('/register',
         .then(({ newUserDTO, token }) => {
             res.status(201)
             .cookie(COOKIE_NAME, token, { httpOnly: true })
-            .json(newUserDTO)
+            .json({newUserDTO, token})
         }).catch((err) => {
             return res.status(400).send({
                 message: `${err.message}`,
@@ -33,11 +33,11 @@ router.post('/login',
         if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() }); 
         else validationResult(req).throw(); // Else clear validation results and continue with the response.
 
-        login(req.body.usernameOrEmail)
-        .then((token) => {
+        login(req.body.email)
+        .then(({userDTO, token}) => {
             res.status(200)
             .cookie(COOKIE_NAME, token, { httpOnly: true })
-            .json(token)
+            .json({userDTO, token})
         }).catch((err) => {
             return res.status(400).send({
                message: `${err.message}`,

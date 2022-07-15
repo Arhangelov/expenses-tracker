@@ -17,12 +17,6 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 9,
     },
-     income: {
-        type: Array,
-     },
-     expense: {
-        type: Array,
-     },
      transactions: {
         type: Array,
     }

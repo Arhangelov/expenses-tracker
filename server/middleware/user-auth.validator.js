@@ -38,7 +38,7 @@ const registerUserReqValidation = [
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,32}$/)
     .withMessage("Password must be between 8 and 32 characters long, must contain at least 1 uppercase and 1 lowercase letter, 1 digit and 1 special character."),
 
-    body('passwordConfirmation').custom((value, { req }) => {
+    body('confirmPassword').custom((value, { req }) => {
         if (value !== req.body.password) {
           throw new Error("Password does not match.");
         }
@@ -48,13 +48,13 @@ const registerUserReqValidation = [
 ];
 
 const loginUserReqValidation = [
-    body('usernameOrEmail')
+    body('email')
     .exists({ checkFalsy: true })
-    .withMessage("Username or email is required.")
+    .withMessage("Email is required.")
     .isEmail()
-    .custom(async usernameOrEmail => {
-        // Checking if the inputed usernameOrEmail already exists.
-        const existingUser = await User.findOne({ usernameOrEmail });
+    .custom(async email => {
+        // Checking if the inputed email already exists.
+        const existingUser = await User.findOne({ email });
         // Rejecting the request if there is no such user found.
         if (!existingUser) return Promise.reject(`No such user.`);
     }),
@@ -66,7 +66,7 @@ const loginUserReqValidation = [
         const usernameOrEmail = req.body.usernameOrEmail;
         const user = await User.findOne({ usernameOrEmail });
         // Checking if the compared passwords are equal. 
-        const passwordCompare = await bcrypt.compare(password, user.password);
+        const passwordCompare = bcrypt.compare(password, user.password);
         // Rejecting the request if the passwords are not equal.
         if (!passwordCompare) return Promise.reject("Invalid password.");
     }),
