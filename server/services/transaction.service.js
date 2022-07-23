@@ -6,8 +6,8 @@ const getTransactions = async ({ userId }) => {
     return user.transactions;
 };
 
-const addTransaction = async ({ userId, type, name, amount }) => {
-    const user = await User.findById( userId );
+const addTransaction = async ({ username, type, name, amount }) => {
+    const user = await User.findOne({ username: `${username}` });
     const newTransaction = {
         id: uuidv4(),
         type: type,
@@ -18,7 +18,7 @@ const addTransaction = async ({ userId, type, name, amount }) => {
     user.transactions.push(newTransaction);
     user.save();
     
-    return user.transactions;
+    return newTransaction;
 };
 
 const deleteTransaction = async ( transactionId, userId ) => {

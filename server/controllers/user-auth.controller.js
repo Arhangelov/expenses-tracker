@@ -1,8 +1,22 @@
 const router = require('express').Router();
 const { COOKIE_NAME } = require('../config/main');
-const { register, login } = require('../services/user-auth.service');
+const { getUser, register, login } = require('../services/user-auth.service');
 const { registerUserReqValidation, loginUserReqValidation } = require("../middleware/user-auth.validator");
 const { validationResult } = require("express-validator");
+
+router.post ('/getUser', (req, res) => {
+    getUser(req.body)
+    .then(({loggedUser, token}) => {
+        res.status(200)
+        .cookie(COOKIE_NAME, token, { httpOnly: true })
+        .json({ loggedUser })
+    }).catch((err) => {
+        return res.status(400).send({
+           message: `${err.message}`,
+           type: "ERROR",
+        });
+    });
+});
 
 router.post('/register',
     registerUserReqValidation,
