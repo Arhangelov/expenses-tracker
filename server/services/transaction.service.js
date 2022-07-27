@@ -1,8 +1,8 @@
 const User = require("../models/User");
 const {v4: uuidv4} = require('uuid');
 
-const getTransactions = async ({ userId }) => {
-    const user = await User.findById( userId );
+const getTransactions = async ({ username }) => {
+    const user = await User.findOne({ username: `${username}` });
     return user.transactions;
 };
 

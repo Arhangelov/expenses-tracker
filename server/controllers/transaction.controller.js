@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const { getTransactions, addTransaction, deleteTransaction } = require('../services/transaction.service');
 
-router.get('/get', (req, res) => {
+router.post('/get', (req, res) => {
+    console.log(req.body);
     getTransactions(req.body)
     .then((transactions) => {
         res.status(200)
