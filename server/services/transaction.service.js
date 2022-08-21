@@ -6,12 +6,12 @@ const getTransactions = async ({ username }) => {
     return user.transactions;
 };
 
-const addTransaction = async ({ username, type, name, amount }) => {
+const addTransaction = async ({ username, type, category, amount }) => {
     const user = await User.findOne({ username: `${username}` });
     const newTransaction = {
         id: uuidv4(),
         type: type,
-        name: name,
+        category: category,
         amount: Number(amount),
         date: new Date(),
     };
@@ -21,9 +21,9 @@ const addTransaction = async ({ username, type, name, amount }) => {
     return newTransaction;
 };
 
-const deleteTransaction = async ( transactionId, userId ) => {
-    const user = await User.findById(userId);
-    user.transactions = user.transactions.filter(t => t.id !== transactionId);
+const deleteTransaction = async ( transactionId, username ) => {
+    const user = await User.findOne({ username: username });
+    user.transactions = user.transactions.filter(t => t.id !== transactionId); //this does not overwrite the transactions array
     user.save();
     return user.transactions;
 };

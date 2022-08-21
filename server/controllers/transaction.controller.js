@@ -32,8 +32,8 @@ router.post('/add', (req, res) => {
 
 router.delete('/delete/:id', (req, res) => {
     const transactionId = req.params.id;
-    const userId = req.body.userId;
-    deleteTransaction( transactionId, userId )
+    const username = req.body.username;
+    deleteTransaction( transactionId, username )
     .then((transactions) => {
         res.status(200)
         .json(transactions)
